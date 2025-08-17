@@ -40,7 +40,7 @@ const page = () => {
   const [filters, setFilters] = useState({
     role: '',
     status: '',
-    experience: '', // Changed from minExperience/maxExperience to single experience field
+    experience: '', 
     search: ''
   });
 
@@ -107,7 +107,7 @@ const page = () => {
     return applications.find(app => app.id === activeId);
   }, [activeId, applications]);
 
-  // Handle redirect in useEffect instead of during render
+
   useEffect(() => {
     if (!authLoading && !user) {
       router.push('/');
@@ -125,7 +125,6 @@ const page = () => {
     );
   }
 
-  // Don't render anything if user is not authenticated (redirect is happening)
   if (!user) {
     return null;
   }
@@ -170,69 +169,68 @@ const page = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
+ {/* Header */}
 <div className="bg-white shadow-sm border-b border-gray-200">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex justify-between items-center py-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">ATS Dashboard</h1>
-        <p className="text-gray-600 mt-1">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
+      <div className="flex-1 min-w-0">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 truncate">ATS Dashboard</h1>
+        <p className="text-gray-600 mt-1 text-xs sm:text-sm md:text-base truncate">
           Welcome back, {user.email}
         </p>
       </div>
-
-      <div className="flex items-center space-x-4">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
         {/* View Mode Toggle */}
-        <div className="flex rounded-lg bg-gray-100 p-1">
+        <div className="flex rounded-lg bg-gray-100 p-1 w-full sm:w-auto">
           <button
             onClick={() => setViewMode('kanban')}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all ${
+            className={`flex items-center justify-center space-x-1 sm:space-x-2 px-2 sm:px-3 md:px-4 py-2 rounded-md transition-all flex-1 sm:flex-none ${
               viewMode === 'kanban' 
                 ? 'bg-white text-blue-600 shadow-sm' 
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <Columns size={16} />
-            <span>Kanban</span>
+            <Columns size={14} className="sm:w-4 sm:h-4" />
+            <span className="text-xs sm:text-sm md:text-base">Kanban</span>
           </button>
           <button
             onClick={() => setViewMode('analytics')}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all ${
+            className={`flex items-center justify-center space-x-1 sm:space-x-2 px-2 sm:px-3 md:px-4 py-2 rounded-md transition-all flex-1 sm:flex-none ${
               viewMode === 'analytics' 
                 ? 'bg-white text-blue-600 shadow-sm' 
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <BarChart3 size={16} />
-            <span>Analytics</span>
+            <BarChart3 size={14} className="sm:w-4 sm:h-4" />
+            <span className="text-xs sm:text-sm md:text-base">Analytics</span>
           </button>
         </div>
-
-        {/* Add Application Button */}
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 shadow-sm"
-        >
-          <Plus size={16} />
-          <span>Add Application</span>
-        </button>
-
-        {/* Visual Separator */}
-        <div className="h-6 w-px bg-gray-300"></div>
-
-        {/* Logout Button - At the end */}
-        <button
-          onClick={handleSignOut}
-          className="text-gray-500 hover:text-red-600 transition-colors p-2 rounded-lg hover:bg-red-50"
-          title="Sign Out"
-        >
-          <LogOut size={20} />
-        </button>
+        {/* Action Buttons Row */}
+        <div className="flex items-center justify-between sm:justify-start space-x-3 sm:space-x-4">
+          {/* Add Application Button */}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-600 text-white px-2 sm:px-3 md:px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-1 sm:space-x-2 shadow-sm flex-1 sm:flex-none justify-center sm:justify-start"
+          >
+            <Plus size={14} className="sm:w-4 sm:h-4" />
+            <span className="text-xs sm:text-sm md:text-base">Add Application</span>
+          </button>
+          {/* Visual Separator - Hidden on mobile and small tablets */}
+          <div className="hidden md:block h-6 w-px bg-gray-300"></div>
+          {/* Logout Button */}
+          <button
+            onClick={handleSignOut}
+            className="text-gray-500 hover:text-red-600 transition-colors p-2 rounded-lg hover:bg-red-50 flex items-center justify-center"
+            title="Sign Out"
+          >
+            <LogOut size={18} className="sm:w-5 sm:h-5" />
+            <span className="sr-only">Sign Out</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {viewMode === 'kanban' ? (
