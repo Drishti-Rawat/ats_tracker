@@ -19,6 +19,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
+import { Analytics } from '@/components/Analytics';
 
 const COLUMNS = [
   { id: 'applied', title: 'Applied' },
@@ -293,9 +294,7 @@ const page = () => {
             )}
           </>
         ) : (
-          <div>
-            hello
-          </div>
+         <Analytics applications={applications} />
         )}
       </div>
 
