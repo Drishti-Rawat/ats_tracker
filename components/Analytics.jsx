@@ -101,7 +101,7 @@ export const Analytics = ({ applications = [] }) => {
           {/* Pipeline Status Chart */}
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-8 hover:shadow-xl transition-shadow duration-300">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg">
+              <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
                 <TrendingUp className="text-white" size={20} />
               </div>
               <h3 className="text-xl font-bold text-gray-900">Pipeline Status</h3>

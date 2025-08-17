@@ -34,13 +34,82 @@ export const useApplications = () => {
     }
   };
 
-  const addApplication = async (application) => {
+   const uploadResumeFile = async (file, candidateName) => {
+    if (!user || !file) return null;
+
+    try {
+      // Create a unique filename
+      const timestamp = Date.now();
+      const sanitizedCandidateName = candidateName.replace(/[^a-zA-Z0-9]/g, '_');
+      const fileName = `${user.id}/${timestamp}_${sanitizedCandidateName}_resume.pdf`;
+
+      // Upload file to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('resumes')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('resumes')
+        .getPublicUrl(fileName);
+
+      return {
+        filePath: uploadData.path,
+        publicUrl: publicUrl,
+        fileName: file.name,
+        fileSize: file.size
+      };
+    } catch (error) {
+      console.error('Error uploading resume:', error);
+      throw new Error('Failed to upload resume file');
+    }
+  };
+
+   const addApplication = async (application) => {
     if (!user) throw new Error('User must be authenticated');
 
     try {
+      let resumeData = {};
+
+      // Handle file upload if present
+      if (application.resumeFile) {
+        const uploadResult = await uploadResumeFile(
+          application.resumeFile, 
+          application.candidate_name
+        );
+        
+        resumeData = {
+          resume_url: uploadResult.publicUrl,
+          resume_file_path: uploadResult.filePath,
+          resume_file_name: uploadResult.fileName,
+          resume_file_size: uploadResult.fileSize
+        };
+      } else if (application.resume_link) {
+        resumeData = {
+          resume_url: application.resume_link,
+          resume_file_name: application.resume_file_name || ''
+        };
+      }
+
+      // Prepare application data (exclude resumeFile from database insert)
+      const { resumeFile, ...applicationData } = application;
+      const finalApplicationData = {
+        ...applicationData,
+        resume_link: resumeData.resume_url || null,
+        user_id: user.id
+      };
+
       const { data, error } = await supabase
         .from('applications')
-        .insert({ ...application, user_id: user.id })
+        .insert(finalApplicationData)
         .select()
         .single();
 

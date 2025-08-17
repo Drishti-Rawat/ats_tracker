@@ -31,6 +31,7 @@ const COLUMNS = [
 const page = () => {
 
   const { user, loading: authLoading, signOut } = useAuth();
+  console.log("Current user in page component:", user);
   const router = useRouter();
   const { applications, loading, error, addApplication, updateApplication, deleteApplication } = useApplications();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,8 +40,7 @@ const page = () => {
   const [filters, setFilters] = useState({
     role: '',
     status: '',
-    minExperience: 0,
-    maxExperience: 50,
+    experience: '', // Changed from minExperience/maxExperience to single experience field
     search: ''
   });
 
@@ -53,19 +53,37 @@ const page = () => {
     })
   );
 
+  // Helper function to check if experience matches the selected range
+  const matchesExperience = (experienceYears, experienceFilter) => {
+    if (!experienceFilter) return true; // No filter selected
+    
+    switch (experienceFilter) {
+      case '0-1':
+        return experienceYears >= 0 && experienceYears <= 1;
+      case '1-3':
+        return experienceYears >= 1 && experienceYears <= 3;
+      case '3-5':
+        return experienceYears >= 3 && experienceYears <= 5;
+      case '5-10':
+        return experienceYears >= 5 && experienceYears <= 10;
+      case '10+':
+        return experienceYears >= 10;
+      default:
+        return true;
+    }
+  };
+
   // Filter applications
   const filteredApplications = useMemo(() => {
     return applications.filter(app => {
       const matchesRole = !filters.role || app.role === filters.role;
       const matchesStatus = !filters.status || app.status === filters.status;
-      const matchesExperience = 
-        app.experience_years >= filters.minExperience && 
-        app.experience_years <= filters.maxExperience;
+      const matchesExperienceRange = matchesExperience(app.experience_years, filters.experience);
       const matchesSearch = !filters.search || 
         app.candidate_name.toLowerCase().includes(filters.search.toLowerCase()) ||
         app.role.toLowerCase().includes(filters.search.toLowerCase());
 
-      return matchesRole && matchesStatus && matchesExperience && matchesSearch;
+      return matchesRole && matchesStatus && matchesExperienceRange && matchesSearch;
     });
   }, [applications, filters]);
 
@@ -270,8 +288,7 @@ const page = () => {
                   onClick={() => setFilters({
                     role: '',
                     status: '',
-                    minExperience: 0,
-                    maxExperience: 50,
+                    experience: '', // Updated clear filters
                     search: ''
                   })}
                   className="mt-4 text-blue-600 hover:text-blue-800 font-medium"

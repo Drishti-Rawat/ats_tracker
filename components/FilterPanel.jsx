@@ -7,18 +7,25 @@ export const FilterPanel = ({
   onFiltersChange,
   roles = ['Frontend Developer', 'Backend Developer', 'Full Stack', 'Manager', 'Designer']
 }) => {
-  const hasActiveFilters = filters.search || filters.role || filters.status || 
-                          filters.minExperience > 0 || filters.maxExperience < 50;
+  const hasActiveFilters = filters.search || filters.role || filters.status || filters.experience;
 
   const clearFilters = () => {
     onFiltersChange({
       search: '',
       role: '',
       status: '',
-      minExperience: 0,
-      maxExperience: 50
+      experience: ''
     });
   };
+
+  const experienceOptions = [
+    { value: '', label: 'All Experience' },
+    { value: '0-1', label: '0-1 years' },
+    { value: '1-3', label: '1-3 years' },
+    { value: '3-5', label: '3-5 years' },
+    { value: '5-10', label: '5-10 years' },
+    { value: '10+', label: '10+ years' }
+  ];
 
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/60 shadow-sm mb-6">
@@ -100,29 +107,24 @@ export const FilterPanel = ({
             </div>
           </div>
 
-          {/* Experience Range - Compact with Label */}
-          <div className="flex items-center space-x-2 min-w-[200px]">
-            <span className="text-xs font-medium text-gray-600 shrink-0">Experience:</span>
-            <input
-              type="number"
-              min="0"
-              max="50"
-              value={filters.minExperience}
-              onChange={(e) => onFiltersChange({ ...filters, minExperience: parseInt(e.target.value) || 0 })}
-              placeholder="0"
-              className="w-12 px-1 py-2 text-sm text-gray-900 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-200 text-center"
-            />
-            <span className="text-xs text-gray-400">—</span>
-            <input
-              type="number"
-              min="0"
-              max="50"
-              value={filters.maxExperience}
-              onChange={(e) => onFiltersChange({ ...filters, maxExperience: parseInt(e.target.value) || 50 })}
-              placeholder="50"
-              className="w-12 px-1 py-2 text-sm text-gray-900 bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-200 text-center"
-            />
-            <span className="text-xs text-gray-500 shrink-0">years</span>
+          {/* Experience - Dropdown */}
+          <div className="min-w-[140px]">
+            <div className="relative">
+              <select
+                value={filters.experience || ''}
+                onChange={(e) => onFiltersChange({ ...filters, experience: e.target.value })}
+                className="w-full pl-3 pr-8 py-2 text-sm text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-200 appearance-none cursor-pointer"
+              >
+                {experienceOptions.map(option => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                <svg className="h-3 w-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
 
           {/* Clear Filters */}
@@ -139,11 +141,7 @@ export const FilterPanel = ({
             </>
           )}
         </div>
-         
-
-      
       </div>
     </div>
   );
 };
-
