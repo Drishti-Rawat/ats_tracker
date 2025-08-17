@@ -28,7 +28,7 @@ const COLUMNS = [
   { id: 'rejected', title: 'Rejected' }
 ];
 
-const page = () => {
+const DashboardPage = () => {
 
   const { user, loading: authLoading, signOut } = useAuth();
   console.log("Current user in page component:", user);
@@ -322,4 +322,4 @@ const page = () => {
   )
 }
 
-export default page
+export default DashboardPage
