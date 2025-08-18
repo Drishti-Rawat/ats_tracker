@@ -93,7 +93,7 @@ export const FilterPanel = ({
                 onChange={(e) => onFiltersChange({ ...filters, status: e.target.value })}
                 className="w-full pl-3 pr-8 py-2 text-sm text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-200 appearance-none cursor-pointer"
               >
-                <option value="">All Statuses</option>
+                <option value="">All Status</option>
                 <option value="applied">Applied</option>
                 <option value="interview">Interview</option>
                 <option value="offer">Offer</option>
