@@ -122,7 +122,7 @@ http://localhost:3000
 
 ## Demo Video
 
-[![Demo video](./public/thumbnail.png)](https://drive.google.com/file/d/1Z9nmKukVjFSvP6l2md4KCYwYi421EjPr/view?usp=sharing)
+[![Demo video](./public/thumbnail.png)](https://drive.google.com/file/d/1qyxWrjEI2XBA_zIAoKOijG6S7stcTl8o/view?usp=sharing)
 
 
 
