@@ -19,7 +19,7 @@ export const FilterPanel = ({
   };
 
   const experienceOptions = [
-    { value: '', label: 'All Experience' },
+    { value: '', label: 'Experience' },
     { value: '0-1', label: '0-1 years' },
     { value: '1-3', label: '1-3 years' },
     { value: '3-5', label: '3-5 years' },
